@@ -16,9 +16,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Pull Docker image
-      run: |
-        docker pull kunalgawande/speech_to_text:0.2
+        #- name: Pull Docker image
+        #run: |
+        #docker pull kunalgawande/speech_to_text:0.2
 
     - name: Run Docker container
       run: |
