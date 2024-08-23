@@ -1,4 +1,4 @@
-name: Build and Run Docker Image
+name: Run Existing Docker Image
 
 on:
   push:
@@ -9,27 +9,16 @@ on:
       - main
 
 jobs:
-  build:
+  run:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    - name: Cache Docker layers
-      uses: actions/cache@v3
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-docker-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-docker-
-
-    - name: Build Docker image
+    - name: Pull Docker image
       run: |
-        docker build -t kunalgawande/speech_to_text:0.2 .
+        docker pull kunalgawande/speech_to_text:0.2
 
     - name: Run Docker container
       run: |
@@ -40,4 +29,8 @@ jobs:
         -p 8000:8000 \
         --shm-size=2g \
         kunalgawande/speech_to_text:0.2
+
+    - name: List running Docker containers
+      run: |
+        docker ps
 
