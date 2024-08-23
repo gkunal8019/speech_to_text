@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time AI-based Audio Transcription</title>
+</head>
+<body>
+    <h1>Real-time AI-based Audio Transcription</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label for="audio">Upload an audio file:</label><br><br>
+        <input type="file" id="audio" name="audio" accept="audio/*"><br><br>
+        <button type="submit">Transcribe</button>
+    </form>
+    {% if transcription %}
+    <h2>Transcription:</h2>
+    <p>{{ transcription }}</p>
+    {% endif %}
+</body>
+</html>
