@@ -1,4 +1,4 @@
-name: Python CI
+name: Build and Run Docker Image
 
 on:
   push:
@@ -11,22 +11,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      
-    - name: Set up Python
-      uses: actions/setup-python@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Cache Docker layers
+      uses: actions/cache@v3
       with:
-        python-version: '3.11'
-        
-    - name: Install dependencies
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-docker-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
+
+    - name: Build Docker image
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        
-    - name: Run tests
+        docker build -t kunalgawande/speech_to_text:0.2 .
+
+    - name: Run Docker container
       run: |
-        pytest
+        docker run -d --name speech_to_text_container \
+        --gpus=all \
+        -v /home/vikas/kunal:/env \
+        -p 8080:8888 \
+        -p 8000:8000 \
+        --shm-size=2g \
+        kunalgawande/speech_to_text:0.2
 
